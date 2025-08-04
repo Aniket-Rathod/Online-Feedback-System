@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Questions - Online Feedback System</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(120deg, #f6d365, #fda085);
+      min-height: 100vh;
+    }
+
+    .header {
+      background-color: #333;
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-links li {
+      margin-left: 15px;
+    }
+
+    .nav-links a,
+    .nav-links button {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 12px;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links button:hover {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+
+    .container-fluid {
+      padding: 20px;
+    }
+
+    .sidenav {
+      background-color: #ffffffd9;
+      border-radius: 12px;
+      padding: 20px;
+      height: 100%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidenav h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .sidenav .nav-pills > li > a {
+      color: #333;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .sidenav .nav-pills > li.active > a,
+    .sidenav .nav-pills > li > a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .form-box {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .form-box h2 {
+      margin-bottom: 20px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .form-box form {
+      margin-bottom: 25px;
+    }
+
+    .form-box input,
+    .form-box button {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    .form-box button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      font-weight: 500;
+      transition: background 0.3s ease;
+    }
+
+    .form-box button:hover {
+      background-color: #218838;
+    }
+
+    .form-box a {
+      display: inline-block;
+      margin-top: 15px;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    .form-box a:hover {
+      text-decoration: underline;
+    }
+
+    .modal-content {
+      border-radius: 8px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 767px) {
+      .header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-links {
+        margin-top: 10px;
+      }
+
+      .sidenav {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>Online Feedback System</h1>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#">Admin</a></li>
+        <li><button class="btn btn-danger" onclick="showLogoutPopup()">Logout</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 sidenav hidden-xs">
+        <h2>Dashboard</h2>
+        <ul class="nav nav-pills nav-stacked">
+          <li class="active"><a href="questions.html">Questions</a></li>
+          <li class="active"><a href="FeedbackResultServlet">Reviews</a></li>
+        </ul>
+      </div>
+
+      <div class="col-sm-9">
+        <div class="form-box">
+          <h2>Manage Questions</h2>
+
+          <form action="QuestionServlet" method="post">
+            <input type="hidden" name="action" value="add">
+            <input type="text" name="question" placeholder="Enter Question" required>
+            <input type="text" name="subject" placeholder="Enter Subject" required>
+            <input type="number" name="maxMarks" placeholder="Enter Max Marks" required>
+            <button type="submit">Add Question</button>
+          </form>
+
+          <form action="QuestionServlet" method="post">
+            <input type="hidden" name="action" value="update">
+            <input type="number" name="id" placeholder="Enter Question ID to Update" required>
+            <input type="text" name="question" placeholder="New Question Text">
+            <input type="text" name="subject" placeholder="New Subject">
+            <input type="number" name="maxMarks" placeholder="New Max Marks">
+            <button type="submit">Update Question</button>
+          </form>
+
+          <form action="QuestionServlet" method="post">
+            <input type="hidden" name="action" value="delete">
+            <input type="number" name="id" placeholder="Enter Question ID to Delete" required>
+            <button type="submit">Delete Question</button>
+          </form>
+
+          <a href="dash.html">Back to Dashboard</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Logout Popup -->
+  <div id="logoutPopup" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Logout</h4>
+        </div>
+        <div class="modal-body">
+          <p>Changes saved successfully!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" onclick="redirectToHome()">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showLogoutPopup() {
+      $('#logoutPopup').modal('show');
+    }
+
+    function redirectToHome() {
+      window.location.href = 'index.html';
+    }
+  </script>
+
+</body>
+</html>
